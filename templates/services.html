@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Hostel - Our Services</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.05) 10px,
+                rgba(255,255,255,0.05) 20px
+            );
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateX(-50px) translateY(-50px); }
+            100% { transform: translateX(50px) translateY(50px); }
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header h1::before {
+            content: '🏨';
+            margin-right: 15px;
+        }
+
+        header h1::after {
+            content: '🐾';
+            margin-left: 15px;
+        }
+
+        header p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .home-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .home-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .home-btn::before {
+            content: '🏠';
+            margin-right: 8px;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        .section-title::before {
+            content: '🌟';
+            margin-right: 15px;
+        }
+
+        .services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .service-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            border-color: #667eea;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(102, 126, 234, 0.05), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+            animation: shine 1.5s ease-in-out;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            50% { transform: translateX(0%) translateY(0%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .service-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            display: block;
+            animation: serviceFloat 3s ease-in-out infinite;
+        }
+
+        .service-card:nth-child(1) .service-icon { animation-delay: 0s; }
+        .service-card:nth-child(2) .service-icon { animation-delay: 0.5s; }
+        .service-card:nth-child(3) .service-icon { animation-delay: 1s; }
+
+        @keyframes serviceFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .service-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .service-card p {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            color: #666;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .service-card ul {
+            list-style: none;
+            text-align: left;
+            position: relative;
+            z-index: 1;
+        }
+
+        .service-card li {
+            margin-bottom: 12px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e3f2fd 100%);
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-left: 4px solid #667eea;
+        }
+
+        .service-card li:hover {
+            transform: translateX(5px);
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        }
+
+        .service-card li::before {
+            content: '✨';
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        .service-card li b {
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        /* Service-specific styling */
+        .service-card:nth-child(1) {
+            border-top: 4px solid #4caf50;
+        }
+
+        .service-card:nth-child(1) li {
+            border-left-color: #4caf50;
+        }
+
+        .service-card:nth-child(1) li b {
+            color: #4caf50;
+        }
+
+        .service-card:nth-child(2) {
+            border-top: 4px solid #ff9800;
+        }
+
+        .service-card:nth-child(2) li {
+            border-left-color: #ff9800;
+        }
+
+        .service-card:nth-child(2) li b {
+            color: #ff9800;
+        }
+
+        .service-card:nth-child(3) {
+            border-top: 4px solid #f44336;
+        }
+
+        .service-card:nth-child(3) li {
+            border-left-color: #f44336;
+        }
+
+        .service-card:nth-child(3) li b {
+            color: #f44336;
+        }
+
+        footer {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        footer p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .contact-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .contact-item::before {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .contact-item:nth-child(1)::before { content: '📞'; }
+        .contact-item:nth-child(2)::before { content: '📧'; }
+        .contact-item:nth-child(3)::before { content: '📍'; }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .main-content {
+                padding: 40px 15px;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .services {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .service-card {
+                padding: 30px 20px;
+            }
+
+            .service-card h3 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Loading animation */
+        .service-card {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: slideUp 0.6s ease forwards;
+        }
+
+        .service-card:nth-child(1) { animation-delay: 0.2s; }
+        .service-card:nth-child(2) { animation-delay: 0.4s; }
+        .service-card:nth-child(3) { animation-delay: 0.6s; }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Pet Hostel Services</h1>
+            <p>Everything your beloved pet needs for a comfortable stay</p>
+            <div class="buttons">
+                <a href="/" class="home-btn">Back to Homepage</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <h2 class="section-title">Our Premium Services</h2>
+
+        <section class="services">
+            <div class="service-card">
+                <span class="service-icon">🏠</span>
+                <h3>Luxury Accommodations</h3>
+                <p>We offer a variety of comfortable and secure rooms designed for your furry friend's ultimate comfort and happiness.</p>
+                <ul>
+                    <li><b>Normal:</b> Cozy and clean spaces perfect for short stays with all essential amenities.</li>
+                    <li><b>Standard:</b> Spacious rooms equipped with premium amenities for longer, comfortable stays.</li>
+                    <li><b>Premium:</b> Luxurious suites with extra space, special bedding, and personalized pampering services.</li>
+                </ul>
+            </div>
+
+            <div class="service-card">
+                <span class="service-icon">🎓</span>
+                <h3>Professional Training</h3>
+                <p>Our certified and experienced trainers work with your pet to develop good manners, social skills, and fun new abilities.</p>
+                <ul>
+                    <li><b>Obedience Training:</b> Basic commands, leash walking, and respectful behavior development.</li>
+                    <li><b>Potty Training:</b> House training and bathroom etiquette for pets of all ages.</li>
+                    <li><b>Behavioral Modification:</b> Addressing anxiety, aggression, and other behavioral concerns.</li>
+                    <li><b>Social Skills:</b> Safe interaction with other pets and humans.</li>
+                </ul>
+            </div>
+
+            <div class="service-card">
+                <span class="service-icon">🏥</span>
+                <h3>Veterinary Care</h3>
+                <p>Our on-site licensed veterinarian and medical staff ensure your pet's health and well-being throughout their stay.</p>
+                <ul>
+                    <li><b>Routine Checkups:</b> Regular health assessments and wellness monitoring.</li>
+                    <li><b>Vaccinations:</b> Up-to-date immunizations and preventive care programs.</li>
+                    <li><b>Emergency Care:</b> 24/7 medical attention for any health concerns or emergencies.</li>
+                    <li><b>Medication Management:</b> Proper administration of prescribed medications.</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Pet Hostel - Your Pet's Second Home</p>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <strong>Phone</strong><br>
+                    017000000000
+                </div>
+                <div class="contact-item">
+                    <strong>Email</strong><br>
+                    info@pethostel.com
+                </div>
+                <div class="contact-item">
+                    <strong>Address</strong><br>
+                    H12, Central Road<br>
+                    Dhanmondi, Dhaka
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

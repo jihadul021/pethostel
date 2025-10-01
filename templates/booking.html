@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Hostel - Confirm Booking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header::before {
+            content: '🐾';
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            font-size: 2rem;
+            opacity: 0.7;
+        }
+
+        .header::after {
+            content: '🐾';
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2rem;
+            opacity: 0.7;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 10px;
+        }
+
+        .login-section {
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .login-message {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .login-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .login-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        .booking-content {
+            padding: 40px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            border-bottom: 3px solid #f0f0f0;
+            padding-bottom: 15px;
+        }
+
+        .section-title::before {
+            content: '📋';
+            margin-right: 15px;
+            font-size: 2rem;
+        }
+
+        .booking-details {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e3f2fd 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid #e0e7ff;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e7ff;
+            font-size: 1.1rem;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+            margin-top: 10px;
+            padding-top: 20px;
+            border-top: 2px solid #4caf50;
+        }
+
+        .detail-label {
+            color: #666;
+            font-weight: 600;
+        }
+
+        .detail-value {
+            color: #333;
+            font-weight: 700;
+        }
+
+        .cost-value {
+            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+            color: #2e7d32;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            border: 2px solid #4caf50;
+        }
+
+        .cost-value::before {
+            content: '৳';
+        }
+
+        .booking-form {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            border: 2px solid #f0f0f0;
+        }
+
+        .pet-selection-title {
+            font-size: 1.4rem;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .pet-selection-title::before {
+            content: '🐕';
+            margin-right: 10px;
+            font-size: 1.6rem;
+        }
+
+        .pet-option {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background: #f8f9ff;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .pet-option:hover {
+            background: #e3f2fd;
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .pet-option input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 15px;
+            accent-color: #667eea;
+            cursor: pointer;
+        }
+
+        .pet-option label {
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .add-pet-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #fff3e0;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px dashed #ff9800;
+        }
+
+        .add-pet-link {
+            color: #f57c00;
+            text-decoration: none;
+            font-weight: 700;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .add-pet-link:hover {
+            background: #f57c00;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .confirm-button {
+            width: 100%;
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            padding: 20px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 35px rgba(76, 175, 80, 0.3);
+        }
+
+        .confirm-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 45px rgba(76, 175, 80, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .booking-content {
+                padding: 20px;
+            }
+
+            .detail-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .booking-details {
+                padding: 20px;
+            }
+        }
+
+        .icon-checkin::before { content: '📅'; margin-right: 8px; }
+        .icon-checkout::before { content: '📅'; margin-right: 8px; }
+        .icon-pets::before { content: '🐕'; margin-right: 8px; }
+        .icon-room::before { content: '🏠'; margin-right: 8px; }
+        .icon-cost::before { content: '💰'; margin-right: 8px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Confirm Your Booking</h1>
+        </div>
+
+        {% if not user.is_authenticated %}
+            <div class="login-section">
+                <p class="login-message">Please log in to complete your booking</p>
+                <a href="login" class="login-button">Login to Continue</a>
+            </div>
+        {% else %}
+            <div class="booking-content">
+                <h3 class="section-title">Your booking details</h3>
+
+                <div class="booking-details">
+                    <div class="detail-item">
+                        <span class="detail-label icon-checkin">Check in:</span>
+                        <span class="detail-value">{{ checkin }}</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="detail-label icon-checkout">Check out:</span>
+                        <span class="detail-value">{{ checkout }}</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="detail-label icon-pets">Total Pet:</span>
+                        <span class="detail-value">{{ petcount }}</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="detail-label icon-room">Room category:</span>
+                        <span class="detail-value">{{ category }}</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <span class="detail-label icon-cost">Total cost:</span>
+                        <span class="cost-value">{{ cost }}</span>
+                    </div>
+                </div>
+
+                <form action="confirm_booking" method="post" class="booking-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="checkin" value="{{ checkin }}">
+                    <input type="hidden" name="checkout" value="{{ checkout }}">
+                    <input type="hidden" name="petcount" value="{{ petcount }}">
+                    <input type="hidden" name="category" value="{{ category }}">
+                    <input type="hidden" name="cost" value="{{ cost }}">
+
+                    <label class="pet-selection-title">Select your pets:</label>
+
+                    {% for pet in pets %}
+                        <div class="pet-option">
+                            <input type="checkbox" name="pets" value="{{ pet.id }}" id="pet{{ pet.id }}">
+                            <label for="pet{{ pet.id }}">{{ pet.name }}</label>
+                        </div>
+                    {% endfor %}
+
+                    <div class="add-pet-section">
+                        <p>Don't see your pet? <a href="pet-register" class="add-pet-link">Add a new pet</a></p>
+                    </div>
+
+                    <input type="submit" value="Confirm Booking" class="confirm-button">
+                </form>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pet Hostel - Employee Management</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 25px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .header {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+      padding: 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255,255,255,0.1) 10px,
+        rgba(255,255,255,0.1) 20px
+      );
+      animation: slide 20s linear infinite;
+    }
+
+    @keyframes slide {
+      0% { transform: translateX(-50px) translateY(-50px); }
+      100% { transform: translateX(0px) translateY(0px); }
+    }
+
+    .header h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      position: relative;
+      z-index: 1;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      margin-bottom: 10px;
+    }
+
+    .header h1::before {
+      content: '👥';
+      margin-right: 15px;
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+    }
+
+    .content {
+      padding: 40px;
+    }
+
+    .action-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .stats {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      padding: 20px 25px;
+      border-radius: 15px;
+      text-align: center;
+      color: white;
+      min-width: 120px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .stat-card h3 {
+      font-size: 2rem;
+      margin-bottom: 5px;
+    }
+
+    .stat-card p {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    .add-employee-btn {
+      background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+      color: white;
+      padding: 15px 30px;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 25px rgba(76, 175, 80, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .add-employee-btn::before {
+      content: '➕';
+      font-size: 1.2rem;
+    }
+
+    .add-employee-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 35px rgba(76, 175, 80, 0.4);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      border-radius: 15px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      min-width: 1000px;
+    }
+
+    thead th {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 25px 20px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    thead th::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: rgba(255,255,255,0.3);
+    }
+
+    /* Column-specific header icons */
+    thead th:nth-child(1)::before { content: '🆔 '; }
+    thead th:nth-child(2)::before { content: '👤 '; }
+    thead th:nth-child(3)::before { content: '⚧️ '; }
+    thead th:nth-child(4)::before { content: '📧 '; }
+    thead th:nth-child(5)::before { content: '📞 '; }
+    thead th:nth-child(6)::before { content: '🏠 '; }
+    thead th:nth-child(7)::before { content: '💼 '; }
+    thead th:nth-child(8)::before { content: '⚡ '; }
+
+    tbody td {
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+      font-size: 0.95rem;
+      vertical-align: middle;
+      transition: all 0.3s ease;
+    }
+
+    tbody tr {
+      transition: all 0.3s ease;
+    }
+
+    tbody tr:hover {
+      background: linear-gradient(135deg, #f8f9ff 0%, #e3f2fd 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #fafbff;
+    }
+
+    tbody tr:hover:nth-child(even) {
+      background: linear-gradient(135deg, #f8f9ff 0%, #e3f2fd 100%);
+    }
+
+    .employee-id {
+      font-weight: 700;
+      color: #667eea;
+      font-size: 1.1rem;
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+      padding: 8px 12px;
+      border-radius: 20px;
+      display: inline-block;
+    }
+
+    .employee-id::before {
+      content: '#';
+      opacity: 0.7;
+    }
+
+    .employee-name {
+      font-weight: 700;
+      color: #333;
+      font-size: 1.1rem;
+    }
+
+    .employee-name::before {
+      content: '👤 ';
+      margin-right: 5px;
+    }
+
+    .employee-gender {
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: 600;
+      text-align: center;
+      text-transform: capitalize;
+    }
+
+    .gender-male {
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+      color: #1976d2;
+    }
+
+    .gender-female {
+      background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+      color: #7b1fa2;
+    }
+
+    .gender-other {
+      background: linear-gradient(135deg, #fff3e0 0%, #ffcc02 100%);
+      color: #f57c00;
+    }
+
+    .employee-email {
+      color: #667eea;
+      font-weight: 600;
+      word-break: break-word;
+    }
+
+    .employee-phone {
+      font-family: 'Courier New', monospace;
+      background: #f0f8ff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: #1976d2;
+      font-weight: 600;
+    }
+
+    .employee-address {
+      color: #666;
+      line-height: 1.4;
+      max-width: 200px;
+    }
+
+    .employee-role {
+      background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+      color: #2e7d32;
+      padding: 10px 15px;
+      border-radius: 20px;
+      font-weight: 700;
+      text-align: center;
+      text-transform: capitalize;
+    }
+
+    .employee-role::before {
+      content: '💼 ';
+      margin-right: 5px;
+    }
+
+    .remove-btn {
+      background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(244, 67, 54, 0.3);
+      font-size: 0.9rem;
+    }
+
+    .remove-btn::before {
+      content: '🗑️ ';
+      margin-right: 5px;
+    }
+
+    .remove-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(244, 67, 54, 0.4);
+    }
+
+    .remove-form {
+      margin: 0;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+      color: #666;
+      background: white;
+      border-radius: 15px;
+    }
+
+    .empty-icon {
+      font-size: 5rem;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .empty-text {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .empty-subtext {
+      color: #666;
+      font-size: 1rem;
+      margin-bottom: 30px;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2rem;
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      .action-section {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .stats {
+        justify-content: center;
+      }
+
+      thead th,
+      tbody td {
+        padding: 15px 10px;
+        font-size: 0.85rem;
+      }
+
+      .employee-address {
+        max-width: 150px;
+      }
+
+      .add-employee-btn {
+        text-align: center;
+        justify-content: center;
+      }
+    }
+
+    /* Loading animation */
+    tbody tr {
+      opacity: 0;
+      animation: fadeInRow 0.5s ease forwards;
+    }
+
+    tbody tr:nth-child(1) { animation-delay: 0.1s; }
+    tbody tr:nth-child(2) { animation-delay: 0.2s; }
+    tbody tr:nth-child(3) { animation-delay: 0.3s; }
+    tbody tr:nth-child(4) { animation-delay: 0.4s; }
+    tbody tr:nth-child(5) { animation-delay: 0.5s; }
+
+    @keyframes fadeInRow {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Employee Management</h1>
+      <p>Manage your pet hostel team members</p>
+    </div>
+
+    <div class="content">
+      <div class="action-section">
+        <div class="stats">
+          <div class="stat-card">
+            <h3>{{ employees|length }}</h3>
+            <p>Total Staff</p>
+          </div>
+          <div class="stat-card">
+            <h3>Active</h3>
+            <p>Status</p>
+          </div>
+        </div>
+        <a href="employee_add" class="add-employee-btn">Add New Employee</a>
+      </div>
+
+      {% if employees %}
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Employee ID</th>
+              <th>Name</th>
+              <th>Gender</th>
+              <th>Email</th>
+              <th>Phone Number</th>
+              <th>Address</th>
+              <th>Role</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for em in employees %}
+            {% if em.is_active %}
+            <tr>
+              <td>
+                <span class="employee-id">{{ em.id }}</span>
+              </td>
+              <td class="employee-name">
+                {{ em.name }}
+              </td>
+              <td>
+                <span class="employee-gender {% if em.gender == 'male' %}gender-male{% elif em.gender == 'female' %}gender-female{% else %}gender-other{% endif %}">
+                  {{ em.gender }}
+                </span>
+              </td>
+              <td class="employee-email">
+                {{ em.email }}
+              </td>
+              <td>
+                <span class="employee-phone">{{ em.phone }}</span>
+              </td>
+              <td class="employee-address">
+                {{ em.address }}
+              </td>
+              <td>
+                <span class="employee-role">{{ em.role }}</span>
+              </td>
+              <td>
+                <form method="post" action="{% url 'remove_employee' em.id %}" class="remove-form">
+                  {% csrf_token %}
+                  <button type="submit" class="remove-btn">Remove</button>
+                </form>
+              </td>
+            </tr>
+            {% endif %}
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <span class="empty-icon">👥</span>
+        <div class="empty-text">No Employees Found</div>
+        <div class="empty-subtext">Start building your team by adding your first employee</div>
+        <a href="employee_add" class="add-employee-btn">Add First Employee</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

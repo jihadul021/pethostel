@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Hostel - Join Our Family</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            padding: 50px 40px;
+            max-width: 700px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(102, 126, 234, 0.03) 10px,
+                rgba(102, 126, 234, 0.03) 20px
+            );
+            animation: float 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0% { transform: translateX(-50px) translateY(-50px); }
+            100% { transform: translateX(50px) translateY(50px); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .pet-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+            animation: petWelcome 3s ease-in-out infinite;
+        }
+
+        @keyframes petWelcome {
+            0%, 50%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.1) rotate(-5deg); }
+            75% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            font-weight: 500;
+            line-height: 1.6;
+        }
+
+        .registration-form {
+            position: relative;
+            z-index: 1;
+        }
+
+        .messages {
+            background: linear-gradient(135deg, #ffcdd2 0%, #ef9a9a 100%);
+            color: #c62828;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 600;
+            border: 2px solid #ef5350;
+            box-shadow: 0 5px 15px rgba(198, 40, 40, 0.2);
+        }
+
+        .messages::before {
+            content: '⚠️';
+            margin-right: 8px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Label icons */
+        label::before {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        label[for="fname"]::before { content: '👤'; }
+        label[for="lname"]::before { content: '👤'; }
+        label[for="username"]::before { content: '🏷️'; }
+        label[for="email"]::before { content: '📧'; }
+        label[for="phone"]::before { content: '📞'; }
+        label[for="address"]::before { content: '🏠'; }
+        label[for="passwrd"]::before { content: '🔒'; }
+        label[for="birth"]::before { content: '🎂'; }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="date"] {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: white;
+            transition: all 0.3s ease;
+            outline: none;
+            font-family: inherit;
+        }
+
+        input:focus {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        /* Field-specific styling */
+        .form-group:nth-child(odd) input {
+            background-image: linear-gradient(135deg, #f0fff4 0%, #dcfce7 100%);
+        }
+
+        .form-group:nth-child(even) input {
+            background-image: linear-gradient(135deg, #fef7ff 0%, #fae8ff 100%);
+        }
+
+        .form-group.full-width input {
+            background-image: linear-gradient(135deg, #fff3e0 0%, #ffe8d6 100%);
+        }
+
+        .submit-button {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-button::before {
+            content: '🐾';
+            position: absolute;
+            left: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 45px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-button:hover::before {
+            left: calc(50% - 12px);
+        }
+
+        .submit-button:active {
+            transform: translateY(-1px);
+        }
+
+        .signin-section {
+            text-align: center;
+            padding: 25px 0;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .signin-text {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .signin-link {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 12px 25px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            display: inline-block;
+            transition: all 0.3s ease;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .signin-link:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .divider {
+            position: relative;
+            text-align: center;
+            margin: 25px 0;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #ddd, transparent);
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 20px;
+            color: #999;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 25px;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .pet-icon {
+                font-size: 3rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            input[type="text"],
+            input[type="email"],
+            input[type="password"],
+            input[type="date"] {
+                padding: 12px 15px;
+            }
+
+            .submit-button {
+                padding: 15px;
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Form animations */
+        .form-row {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.6s ease forwards;
+        }
+
+        .form-row:nth-child(1) { animation-delay: 0.1s; }
+        .form-row:nth-child(2) { animation-delay: 0.2s; }
+        .form-row:nth-child(3) { animation-delay: 0.3s; }
+        .form-row:nth-child(4) { animation-delay: 0.4s; }
+
+        .submit-button {
+            opacity: 0;
+            animation: slideUp 0.6s ease forwards;
+            animation-delay: 0.5s;
+        }
+
+        .signin-section {
+            opacity: 0;
+            animation: slideUp 0.6s ease forwards;
+            animation-delay: 0.6s;
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating background elements */
+        .container::after {
+            content: '🐕 🐱 🏠 👨‍👩‍👧‍👦 ❤️';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.2rem;
+            opacity: 0.08;
+            animation: petFloat 8s ease-in-out infinite;
+            pointer-events: none;
+            line-height: 2;
+        }
+
+        @keyframes petFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="pet-icon">🐾</span>
+            <h1>Welcome to Pet Hostel!</h1>
+            <p class="subtitle">Join our loving community and give your pet friend the best care they deserve</p>
+        </div>
+
+        <form action="register" method="post" class="registration-form">
+            {% csrf_token %}
+
+            {% if messages %}
+                <div class="messages">
+                    {% for msg in messages %}
+                        {{ msg }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="fname">First Name</label>
+                    <input type="text" name="fname" id="fname" placeholder="Enter your first name" required>
+                </div>
+                <div class="form-group">
+                    <label for="lname">Last Name</label>
+                    <input type="text" name="lname" id="lname" placeholder="Enter your last name" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username" placeholder="Choose a unique username" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" name="email" id="email" placeholder="Enter your email" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="text" name="phone" id="phone" placeholder="Enter your phone number" required>
+                </div>
+                <div class="form-group">
+                    <label for="birth">Birth Date</label>
+                    <input type="date" name="birth" id="birth" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label for="address">Full Address</label>
+                    <input type="text" name="address" id="address" placeholder="Enter your complete address" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label for="passwrd">Password</label>
+                    <input type="password" name="passwrd" id="passwrd" placeholder="Create a strong password" required>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-button">Join Pet Hostel Family</button>
+        </form>
+
+        <div class="divider">
+            <span>Already a member?</span>
+        </div>
+
+        <div class="signin-section">
+            <p class="signin-text">
+                Welcome back to our pet hostel family!<br>
+                Continue your journey with us
+            </p>
+            <a href="login" class="signin-link">Sign In to Continue</a>
+        </div>
+    </div>
+</body>
+</html>

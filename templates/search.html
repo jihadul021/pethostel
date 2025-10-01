@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Hostel - Book Your Pet's Stay</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px 40px;
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #667eea, #4facfe, #00f2fe, #667eea);
+            background-size: 300% 100%;
+            animation: gradientShift 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 0%; }
+            50% { background-position: 100% 0%; }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .pet-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+            animation: petBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes petBounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-15px); }
+            60% { transform: translateY(-7px); }
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .booking-form {
+            position: relative;
+            z-index: 1;
+        }
+
+        .messages {
+            background: linear-gradient(135deg, #ffcdd2 0%, #ef9a9a 100%);
+            color: #c62828;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 600;
+            border: 2px solid #ef5350;
+            box-shadow: 0 5px 15px rgba(198, 40, 40, 0.2);
+        }
+
+        .messages::before {
+            content: '⚠️';
+            margin-right: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+        }
+
+        /* Label icons */
+        label[for="check-in"]::before { content: '📅'; margin-right: 8px; }
+        label[for="check-out"]::before { content: '📅'; margin-right: 8px; }
+        label[for="pet-number"]::before { content: '🐕'; margin-right: 8px; }
+        label[for="room-type"]::before { content: '🏠'; margin-right: 8px; }
+
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            background: white;
+            transition: all 0.3s ease;
+            outline: none;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        input[type="date"]:focus,
+        select:focus {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+        }
+
+        /* Field-specific styling */
+        .form-group:nth-child(2) input { /* Check-in */
+            background-image: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+        }
+
+        .form-group:nth-child(3) input { /* Check-out */
+            background-image: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+        }
+
+        .form-group:nth-child(4) select { /* Pet number */
+            background-image: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+        }
+
+        .form-group:nth-child(5) select { /* Room type */
+            background-image: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        }
+
+        select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 15px center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+            padding-right: 50px;
+        }
+
+        select option {
+            padding: 10px;
+            background: white;
+            color: #333;
+        }
+
+        .submit-button {
+            width: 100%;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 20px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 35px rgba(79, 172, 254, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-button::before {
+            content: '🔍';
+            position: absolute;
+            left: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 45px rgba(79, 172, 254, 0.4);
+        }
+
+        .submit-button:hover::before {
+            left: calc(50% - 12px);
+        }
+
+        .submit-button:active {
+            transform: translateY(-1px);
+        }
+
+        /* Room type styling */
+        .room-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .room-card {
+            background: white;
+            border: 2px solid #f0f0f0;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .room-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.15);
+        }
+
+        .room-card.normal {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        }
+
+        .room-card.standard {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+        }
+
+        .room-card.premium {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffcc02 100%);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 25px;
+                margin: 10px;
+            }
+
+            h2 {
+                font-size: 2rem;
+            }
+
+            .pet-icon {
+                font-size: 3rem;
+            }
+
+            input[type="date"],
+            select {
+                padding: 14px 18px;
+                font-size: 1rem;
+            }
+
+            .submit-button {
+                padding: 16px;
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Form animations */
+        .form-group {
+            opacity: 0;
+            transform: translateX(-30px);
+            animation: slideInForm 0.6s ease forwards;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; }
+
+        .submit-button {
+            opacity: 0;
+            animation: slideInForm 0.6s ease forwards;
+            animation-delay: 0.6s;
+        }
+
+        @keyframes slideInForm {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Floating background elements */
+        .container::after {
+            content: '🐕 🐱 🐰 🦮 🐕‍🦺 🐾';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.2rem;
+            opacity: 0.08;
+            animation: float 8s ease-in-out infinite;
+            pointer-events: none;
+            line-height: 2;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(3deg); }
+        }
+
+        /* Required field styling */
+        label[for]::after {
+            content: ' *';
+            color: #e53e3e;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="pet-icon">🏨</span>
+            <h2>Book Your Pet's Stay</h2>
+            <p class="subtitle">Find the perfect accommodation for your furry friend</p>
+        </div>
+
+        <form action="availability" method="post" class="booking-form">
+            {% csrf_token %}
+
+            {% if messages %}
+                <div class="messages">
+                    {% for msg in messages %}
+                        {{ msg }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label for="check-in">Check In Date</label>
+                <input type="date" name="check_in" id="check-in" required>
+            </div>
+
+            <div class="form-group">
+                <label for="check-out">Check Out Date</label>
+                <input type="date" name="check_out" id="check-out" required>
+            </div>
+
+            <div class="form-group">
+                <label for="pet-number">Number of Pets</label>
+                <select name="pet_number" id="pet-number" required>
+                    <option value="">Select Number of Pets</option>
+                    <option value="1">1 Pet</option>
+                    <option value="2">2 Pets</option>
+                    <option value="3">3 Pets</option>
+                    <option value="4">4 Pets</option>
+                    <option value="5">5 Pets</option>
+                    <option value="6">6 Pets</option>
+                    <option value="7">7 Pets</option>
+                    <option value="8">8 Pets</option>
+                    <option value="9">9 Pets</option>
+                    <option value="10">10 Pets</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="room-type">Room Type</label>
+                <select name="room_type" id="room-type" required>
+                    <option value="">Select Room Type</option>
+                    <option value="normal"> Normal - Basic Comfort</option>
+                    <option value="standard"> Standard - Enhanced Care</option>
+                    <option value="premium"> Premium - Luxury Stay</option>
+                </select>
+            </div>
+
+            <button type="submit" class="submit-button">Search Availability</button>
+        </form>
+    </div>
+</body>
+</html>

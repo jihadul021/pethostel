@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Hostel - Change Room Price</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            padding: 50px 40px;
+            max-width: 600px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #667eea, #ff9800, #4caf50, #667eea);
+            background-size: 300% 100%;
+            animation: gradientShift 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 0%; }
+            50% { background-position: 100% 0%; }
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .price-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+            animation: priceFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes priceFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .form-header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .form-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .price-form {
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-label::before {
+            margin-right: 10px;
+            font-size: 1.3rem;
+        }
+
+        .category-label::before { content: '🏠'; }
+        .price-label::before { content: '💰'; }
+
+        select,
+        input[type="number"] {
+            width: 100%;
+            padding: 18px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            background: white;
+            transition: all 0.3s ease;
+            outline: none;
+            font-family: inherit;
+        }
+
+        select:focus,
+        input[type="number"]:focus {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+        }
+
+        /* Category Select Styling */
+        select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 15px center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+            padding-right: 50px;
+            background-color: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        }
+
+        select option {
+            padding: 12px;
+            background: white;
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* Price Input Styling */
+        input[type="number"] {
+            background-image: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+        }
+
+        /* Currency Symbol */
+        .price-input-container {
+            position: relative;
+        }
+
+        .price-input-container::before {
+            content: '৳';
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #4caf50;
+            z-index: 2;
+        }
+
+        .price-input-container input {
+            padding-left: 50px;
+        }
+
+        /* Room Category Previews */
+        .category-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .category-card {
+            background: white;
+            border: 2px solid #f0f0f0;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(102, 126, 234, 0.2);
+        }
+
+        .category-card.normal {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        }
+
+        .category-card.standard {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+        }
+
+        .category-card.premium {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffcc02 100%);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .card-title {
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1.2rem;
+        }
+
+        .current-price {
+            font-size: 1.1rem;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .price-tag {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .submit-button {
+            width: 100%;
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            padding: 20px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 35px rgba(76, 175, 80, 0.3);
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-button::before {
+            content: '💰';
+            position: absolute;
+            left: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 45px rgba(76, 175, 80, 0.4);
+        }
+
+        .submit-button:hover::before {
+            left: calc(50% - 12px);
+        }
+
+        .submit-button:active {
+            transform: translateY(-1px);
+        }
+
+        /* Info Box */
+        .info-box {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffcc02 100%);
+            border: 2px solid #ff9800;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .info-box::before {
+            content: '💡';
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .info-text {
+            color: #e65100;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 30px 25px;
+                margin: 10px;
+            }
+
+            .form-header h1 {
+                font-size: 2rem;
+            }
+
+            .price-icon {
+                font-size: 3rem;
+            }
+
+            select,
+            input[type="number"] {
+                padding: 15px 18px;
+                font-size: 1rem;
+            }
+
+            .price-input-container input {
+                padding-left: 45px;
+            }
+
+            .submit-button {
+                padding: 16px;
+                font-size: 1.1rem;
+            }
+
+            .category-preview {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Form animations */
+        .form-group {
+            opacity: 0;
+            transform: translateX(-30px);
+            animation: slideInForm 0.6s ease forwards;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+
+        .submit-button {
+            opacity: 0;
+            animation: slideInForm 0.6s ease forwards;
+            animation-delay: 0.4s;
+        }
+
+        @keyframes slideInForm {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Floating background elements */
+        .form-container::after {
+            content: '💰 🏠 💵 📈 💲';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.2rem;
+            opacity: 0.08;
+            animation: float 8s ease-in-out infinite;
+            pointer-events: none;
+            line-height: 2;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(3deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-header">
+            <span class="price-icon">💰</span>
+            <h1>Change Room Price</h1>
+            <p class="form-subtitle">Update pricing for your room categories</p>
+        </div>
+
+        <div class="info-box">
+            <div class="info-text">Select a room category and set the new price per night</div>
+        </div>
+
+        <form action="change_price" method="post" class="price-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="category" class="form-label category-label">Room Category</label>
+                <select name="category" id="category" required>
+                    <option value="">Select Room Category</option>
+                    <option value="normal">🏠 Normal Room - Basic Comfort</option>
+                    <option value="standard">🏡 Standard Room - Enhanced Care</option>
+                    <option value="premium">🏰 Premium Room - Luxury Stay</option>
+                </select>
+
+                <div class="category-preview">
+                    <div class="category-card normal">
+                        <span class="card-icon">🏠</span>
+                        <div class="card-title">Normal</div>
+                        <div class="current-price">
+                            <div class="price-tag">Current: ৳400/night</div>
+                        </div>
+                    </div>
+                    <div class="category-card standard">
+                        <span class="card-icon">🏡</span>
+                        <div class="card-title">Standard</div>
+                        <div class="current-price">
+                            <div class="price-tag">Current: ৳500/night</div>
+                        </div>
+                    </div>
+                    <div class="category-card premium">
+                        <span class="card-icon">🏰</span>
+                        <div class="card-title">Premium</div>
+                        <div class="current-price">
+                            <div class="price-tag">Current: ৳700/night</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="price" class="form-label price-label">New Price (per night)</label>
+                <div class="price-input-container">
+                    <input type="number" name="price" id="price" min="100" max="5000" placeholder="Enter new price in Taka" required>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-button">Update Room Price</button>
+        </form>
+    </div>
+</body>
+</html>

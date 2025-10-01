@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pet Hostel - Customer Information</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1600px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 25px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .header {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: white;
+      padding: 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255,255,255,0.1) 10px,
+        rgba(255,255,255,0.1) 20px
+      );
+      animation: slide 20s linear infinite;
+    }
+
+    @keyframes slide {
+      0% { transform: translateX(-50px) translateY(-50px); }
+      100% { transform: translateX(0px) translateY(0px); }
+    }
+
+    .header h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      position: relative;
+      z-index: 1;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      margin-bottom: 10px;
+    }
+
+    .header h1::before {
+      content: '👥';
+      margin-right: 15px;
+    }
+
+    .header p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+    }
+
+    .table-container {
+      padding: 40px;
+      overflow-x: auto;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 30px;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      color: white;
+      min-width: 150px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      transform: translateY(0);
+      transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .stat-card h3 {
+      font-size: 2rem;
+      margin-bottom: 5px;
+    }
+
+    .stat-card p {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      min-width: 1200px;
+    }
+
+    th {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 25px 20px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    th::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: rgba(255,255,255,0.3);
+    }
+
+    /* Column-specific header icons */
+    th:nth-child(1)::before { content: '👤 '; }
+    th:nth-child(2)::before { content: '📧 '; }
+    th:nth-child(3)::before { content: '📞 '; }
+    th:nth-child(4)::before { content: '🎂 '; }
+    th:nth-child(5)::before { content: '🏠 '; }
+    th:nth-child(6)::before { content: '🐕 '; }
+    th:nth-child(7)::before { content: '📋 '; }
+
+    td {
+      padding: 20px;
+      border-bottom: 1px solid #eee;
+      font-size: 0.95rem;
+      vertical-align: top;
+      transition: all 0.3s ease;
+    }
+
+    tbody tr {
+      transition: all 0.3s ease;
+    }
+
+    tbody tr:hover {
+      background: linear-gradient(135deg, #f8f9ff 0%, #e3f2fd 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #fafbff;
+    }
+
+    tbody tr:hover:nth-child(even) {
+      background: linear-gradient(135deg, #f8f9ff 0%, #e3f2fd 100%);
+    }
+
+    .customer-name {
+      font-weight: 700;
+      color: #333;
+      font-size: 1.1rem;
+    }
+
+    .customer-email {
+      color: #667eea;
+      font-weight: 600;
+    }
+
+    .customer-phone {
+      font-family: 'Courier New', monospace;
+      background: #f0f8ff;
+      padding: 5px 10px;
+      border-radius: 8px;
+      color: #1976d2;
+      font-weight: 600;
+    }
+
+    .customer-birth {
+      background: #fff3e0;
+      padding: 5px 10px;
+      border-radius: 8px;
+      color: #f57c00;
+      font-weight: 600;
+    }
+
+    .customer-address {
+      color: #666;
+      line-height: 1.4;
+      max-width: 200px;
+    }
+
+    .pets-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .pets-list li {
+      background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+      color: #2e7d32;
+      padding: 8px 12px;
+      margin: 3px 0;
+      border-radius: 15px;
+      font-weight: 600;
+      display: inline-block;
+      margin-right: 5px;
+    }
+
+    .pets-list li::before {
+      content: '🐾';
+      margin-right: 5px;
+    }
+
+    .booking-ids {
+      font-family: 'Courier New', monospace;
+      background: #f3e5f5;
+      padding: 10px;
+      border-radius: 8px;
+      color: #7b1fa2;
+      font-weight: 600;
+      line-height: 1.6;
+    }
+
+    .booking-id {
+      display: inline-block;
+      background: #9c27b0;
+      color: white;
+      padding: 4px 8px;
+      margin: 2px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+    }
+
+    .booking-id::before {
+      content: '#';
+    }
+
+    .no-data {
+      color: #999;
+      font-style: italic;
+      text-align: center;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #666;
+      background: white;
+      border-radius: 15px;
+    }
+
+    .empty-icon {
+      font-size: 5rem;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .empty-text {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .empty-subtext {
+      color: #666;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2rem;
+      }
+
+      .table-container {
+        padding: 20px;
+      }
+
+      th, td {
+        padding: 15px 10px;
+        font-size: 0.85rem;
+      }
+
+      .stats {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .customer-address {
+        max-width: 150px;
+      }
+    }
+
+    /* Loading animation */
+    tbody tr {
+      opacity: 0;
+      animation: fadeInRow 0.5s ease forwards;
+    }
+
+    tbody tr:nth-child(1) { animation-delay: 0.1s; }
+    tbody tr:nth-child(2) { animation-delay: 0.2s; }
+    tbody tr:nth-child(3) { animation-delay: 0.3s; }
+    tbody tr:nth-child(4) { animation-delay: 0.4s; }
+    tbody tr:nth-child(5) { animation-delay: 0.5s; }
+
+    @keyframes fadeInRow {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Customer Information</h1>
+      <p>Complete overview of all registered customers</p>
+    </div>
+
+    <div class="table-container">
+      <div class="stats">
+
+        <div class="stat-card">
+          <h3>👥</h3>
+          <p>Management</p>
+        </div>
+      </div>
+
+      {% if users %}
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Date of Birth</th>
+            <th>Address</th>
+            <th>Pets</th>
+            <th>Booking IDs</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+          {% if not user.is_superuser %}
+          <tr>
+            <td class="customer-name">
+              {{ user.first_name }} {{ user.last_name }}
+            </td>
+            <td class="customer-email">
+              {{ user.email }}
+            </td>
+            <td>
+              <span class="customer-phone">
+                {{ user.userprofile.phone_number|default:"N/A" }}
+              </span>
+            </td>
+            <td>
+              <span class="customer-birth">
+                {{ user.userprofile.birthdate|default:"N/A" }}
+              </span>
+            </td>
+            <td class="customer-address">
+              {{ user.userprofile.address|default:"No address provided" }}
+            </td>
+            <td>
+              {% if pets %}
+                <ul class="pets-list">
+                {% for pet in pets %}
+                  {% if pet.owner_id == user.id %}
+                    <li>{{ pet.name }}</li>
+                  {% endif %}
+                {% endfor %}
+                </ul>
+              {% else %}
+                <span class="no-data">No pets</span>
+              {% endif %}
+            </td>
+            <td>
+              <div class="booking-ids">
+                {% for book in bookings %}
+                  {% if book.customer_id == user.id %}
+                    <span class="booking-id">{{ book.id }}</span>
+                  {% endif %}
+                {% empty %}
+                  <span class="no-data">No bookings</span>
+                {% endfor %}
+              </div>
+            </td>
+          </tr>
+          {% endif %}
+        {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-state">
+        <span class="empty-icon">👥</span>
+        <div class="empty-text">No Customers Found</div>
+        <div class="empty-subtext">Customer information will appear here once registrations begin</div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

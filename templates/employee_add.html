@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pet Hostel - Add Employee</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .form-container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 25px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+      padding: 50px 40px;
+      max-width: 700px;
+      width: 100%;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .form-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+      animation: shimmer 3s linear infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .employee-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      display: block;
+      animation: employeeFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes employeeFloat {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(3deg); }
+    }
+
+    .form-header h1 {
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .form-subtitle {
+      color: #666;
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
+
+    .employee-form {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Style Django form fields */
+    .employee-form p {
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    .employee-form label {
+      display: block;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .employee-form input[type="text"],
+    .employee-form input[type="email"],
+    .employee-form input[type="number"],
+    .employee-form input[type="date"],
+    .employee-form input[type="tel"],
+    .employee-form select,
+    .employee-form textarea {
+      width: 100%;
+      padding: 15px 20px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      background: white;
+      transition: all 0.3s ease;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .employee-form input:focus,
+    .employee-form select:focus,
+    .employee-form textarea:focus {
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+      background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+    }
+
+    .employee-form select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 12px center;
+      background-repeat: no-repeat;
+      background-size: 16px;
+    }
+
+    .employee-form textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    /* Field-specific styling with alternating colors */
+    .employee-form p:nth-child(odd) input,
+    .employee-form p:nth-child(odd) select,
+    .employee-form p:nth-child(odd) textarea {
+      background-image: linear-gradient(135deg, #f0fff4 0%, #dcfce7 100%);
+    }
+
+    .employee-form p:nth-child(even) input,
+    .employee-form p:nth-child(even) select,
+    .employee-form p:nth-child(even) textarea {
+      background-image: linear-gradient(135deg, #fef7ff 0%, #fae8ff 100%);
+    }
+
+    /* Add icons to labels based on common field names */
+    .employee-form label::before {
+      margin-right: 8px;
+      font-size: 1.2rem;
+    }
+
+    .employee-form p:nth-child(1) label::before { content: '👤'; } /* Name */
+    .employee-form p:nth-child(2) label::before { content: '📧'; } /* Email */
+    .employee-form p:nth-child(3) label::before { content: '📞'; } /* Phone */
+    .employee-form p:nth-child(4) label::before { content: '🏠'; } /* Address */
+    .employee-form p:nth-child(5) label::before { content: '💼'; } /* Position */
+    .employee-form p:nth-child(6) label::before { content: '💰'; } /* Salary */
+    .employee-form p:nth-child(7) label::before { content: '📅'; } /* Date */
+    .employee-form p:nth-child(8) label::before { content: '🆔'; } /* ID */
+
+    .submit-button {
+      width: 100%;
+      background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+      color: white;
+      padding: 18px;
+      border: none;
+      border-radius: 15px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      box-shadow: 0 15px 35px rgba(76, 175, 80, 0.3);
+      margin-top: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-button::before {
+      content: '👨‍💼';
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .submit-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 45px rgba(76, 175, 80, 0.4);
+    }
+
+    .submit-button:hover::before {
+      left: calc(50% - 12px);
+    }
+
+    .submit-button:active {
+      transform: translateY(-1px);
+    }
+
+    /* Error styling */
+    .errorlist {
+      background: linear-gradient(135deg, #ffcdd2 0%, #ef9a9a 100%);
+      color: #c62828;
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin-top: 5px;
+      list-style: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: 2px solid #ef5350;
+    }
+
+    .errorlist li::before {
+      content: '⚠️';
+      margin-right: 5px;
+    }
+
+    /* Help text styling */
+    .helptext {
+      font-size: 0.85rem;
+      color: #666;
+      margin-top: 5px;
+      font-style: italic;
+    }
+
+    /* Required field indicator */
+    .employee-form label:not([for*="optional"])::after {
+      content: ' *';
+      color: #e53e3e;
+      font-weight: bold;
+    }
+
+    /* Info Box */
+    .info-box {
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+      border: 2px solid #2196f3;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .info-box::before {
+      content: '💡';
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .info-text {
+      color: #1565c0;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .form-container {
+        padding: 30px 25px;
+        margin: 10px;
+      }
+
+      .form-header h1 {
+        font-size: 2rem;
+      }
+
+      .employee-icon {
+        font-size: 3rem;
+      }
+
+      .employee-form input[type="text"],
+      .employee-form input[type="email"],
+      .employee-form input[type="number"],
+      .employee-form input[type="date"],
+      .employee-form input[type="tel"],
+      .employee-form select,
+      .employee-form textarea {
+        padding: 12px 15px;
+        font-size: 1rem;
+      }
+
+      .submit-button {
+        padding: 15px;
+        font-size: 1.1rem;
+      }
+    }
+
+    /* Form animation */
+    .employee-form p {
+      opacity: 0;
+      transform: translateX(-30px);
+      animation: slideInForm 0.5s ease forwards;
+    }
+
+    .employee-form p:nth-child(1) { animation-delay: 0.1s; }
+    .employee-form p:nth-child(2) { animation-delay: 0.2s; }
+    .employee-form p:nth-child(3) { animation-delay: 0.3s; }
+    .employee-form p:nth-child(4) { animation-delay: 0.4s; }
+    .employee-form p:nth-child(5) { animation-delay: 0.5s; }
+    .employee-form p:nth-child(6) { animation-delay: 0.6s; }
+    .employee-form p:nth-child(7) { animation-delay: 0.7s; }
+    .employee-form p:nth-child(8) { animation-delay: 0.8s; }
+
+    .submit-button {
+      opacity: 0;
+      animation: slideInForm 0.5s ease forwards;
+      animation-delay: 0.9s;
+    }
+
+    @keyframes slideInForm {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Floating background elements */
+    .form-container::after {
+      content: '👨‍💼 👩‍💼 📋 ✍️ 💼';
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-size: 1.2rem;
+      opacity: 0.08;
+      animation: float 8s ease-in-out infinite;
+      pointer-events: none;
+      line-height: 2;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(3deg); }
+    }
+
+    /* Department badge styling */
+    .department-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+      color: white;
+      padding: 5px 12px;
+      border-radius: 15px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <div class="form-header">
+      <span class="employee-icon">👨‍💼</span>
+      <h1>Add New Employee</h1>
+      <p class="form-subtitle">Expand your pet hostel team</p>
+    </div>
+
+    <div class="info-box">
+      <div class="info-text">Fill out the employee information to add them to your team</div>
+    </div>
+
+    <form method="post" class="employee-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="submit-button">Add Employee to Team</button>
+    </form>
+  </div>
+</body>
+</html>

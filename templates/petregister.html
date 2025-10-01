@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Hostel - Register Your Pet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            padding: 50px 40px;
+            max-width: 600px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #667eea);
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .pet-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+            animation: petWiggle 2s ease-in-out infinite;
+        }
+
+        @keyframes petWiggle {
+            0%, 50%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+
+        .form-header h2 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .form-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .pet-form {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Style Django form fields */
+        .pet-form p {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .pet-form label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .pet-form input[type="text"],
+        .pet-form input[type="email"],
+        .pet-form input[type="number"],
+        .pet-form input[type="date"],
+        .pet-form select,
+        .pet-form textarea {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            background: white;
+            transition: all 0.3s ease;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .pet-form input:focus,
+        .pet-form select:focus,
+        .pet-form textarea:focus {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+        }
+
+        .pet-form select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 12px center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+        }
+
+        .pet-form textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Field-specific styling */
+        .pet-form p:nth-child(1) input { /* Name field */
+            background-image: linear-gradient(135deg, #fff8f0 0%, #ffe8d6 100%);
+        }
+
+        .pet-form p:nth-child(2) input,
+        .pet-form p:nth-child(2) select { /* Species field */
+            background-image: linear-gradient(135deg, #f0fff4 0%, #dcfce7 100%);
+        }
+
+        .pet-form p:nth-child(3) input,
+        .pet-form p:nth-child(3) select { /* Breed field */
+            background-image: linear-gradient(135deg, #fef7ff 0%, #fae8ff 100%);
+        }
+
+        .pet-form p:nth-child(4) input { /* Age field */
+            background-image: linear-gradient(135deg, #f0f9ff 0%, #dbeafe 100%);
+        }
+
+        /* Add icons to labels */
+        .pet-form label::before {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+
+        .pet-form p:nth-child(1) label::before { content: '🏷️'; } /* Name */
+        .pet-form p:nth-child(2) label::before { content: '🦮'; } /* Species */
+        .pet-form p:nth-child(3) label::before { content: '🐕‍🦺'; } /* Breed */
+        .pet-form p:nth-child(4) label::before { content: '🎂'; } /* Age */
+        .pet-form p:nth-child(5) label::before { content: '⚖️'; } /* Weight */
+        .pet-form p:nth-child(6) label::before { content: '🏥'; } /* Medical */
+
+        .submit-button {
+            width: 100%;
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            padding: 18px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 35px rgba(76, 175, 80, 0.3);
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-button::before {
+            content: '🐾';
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 45px rgba(76, 175, 80, 0.4);
+        }
+
+        .submit-button:hover::before {
+            left: calc(50% - 12px);
+        }
+
+        .submit-button:active {
+            transform: translateY(-1px);
+        }
+
+        /* Error styling */
+        .errorlist {
+            background: linear-gradient(135deg, #ffcdd2 0%, #ef9a9a 100%);
+            color: #c62828;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 5px;
+            list-style: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 2px solid #ef5350;
+        }
+
+        .errorlist li::before {
+            content: '⚠️';
+            margin-right: 5px;
+        }
+
+        /* Help text styling */
+        .helptext {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        /* Required field indicator */
+        .pet-form label[for$="_required"]::after,
+        .pet-form label:not([for*="optional"])::after {
+            content: ' *';
+            color: #e53e3e;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 30px 25px;
+                margin: 10px;
+            }
+
+            .form-header h2 {
+                font-size: 2rem;
+            }
+
+            .pet-icon {
+                font-size: 3rem;
+            }
+
+            .pet-form input[type="text"],
+            .pet-form input[type="email"],
+            .pet-form input[type="number"],
+            .pet-form input[type="date"],
+            .pet-form select,
+            .pet-form textarea {
+                padding: 12px 15px;
+                font-size: 1rem;
+            }
+
+            .submit-button {
+                padding: 15px;
+                font-size: 1.1rem;
+            }
+        }
+
+        /* Form animation */
+        .pet-form p {
+            opacity: 0;
+            transform: translateX(-30px);
+            animation: slideInForm 0.5s ease forwards;
+        }
+
+        .pet-form p:nth-child(1) { animation-delay: 0.1s; }
+        .pet-form p:nth-child(2) { animation-delay: 0.2s; }
+        .pet-form p:nth-child(3) { animation-delay: 0.3s; }
+        .pet-form p:nth-child(4) { animation-delay: 0.4s; }
+        .pet-form p:nth-child(5) { animation-delay: 0.5s; }
+        .pet-form p:nth-child(6) { animation-delay: 0.6s; }
+
+        .submit-button {
+            opacity: 0;
+            animation: slideInForm 0.5s ease forwards;
+            animation-delay: 0.7s;
+        }
+
+        @keyframes slideInForm {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Floating background elements */
+        .form-container::after {
+            content: '🐕 🐱 🐰 🦮 🐕‍🦺';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-header">
+            <span class="pet-icon">🐾</span>
+            <h2>Register Your Pet</h2>
+            <p class="form-subtitle">Add your beloved pet to our hostel family</p>
+        </div>
+
+        <form method="post" class="pet-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="submit-button">Register My Pet</button>
+        </form>
+    </div>
+</body>
+</html>
